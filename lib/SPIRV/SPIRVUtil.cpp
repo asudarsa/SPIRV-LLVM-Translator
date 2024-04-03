@@ -440,26 +440,33 @@ bool getSPIRVBuiltin(const std::string &OrigName, spv::BuiltIn &B) {
 // Demangled name is a substring of the name. The DemangledName is updated only
 // if true is returned
 bool oclIsBuiltin(StringRef Name, StringRef &DemangledName, bool IsCpp) {
+  llvm::errs() << "oclIsBuiltin: Name = " << Name << "\n";
   if (Name == "printf") {
     DemangledName = Name;
     return true;
   }
+  llvm::errs() << __LINE__ << "\n";
   if (isNonMangledOCLBuiltin(Name)) {
     DemangledName = Name.drop_front(2);
     return true;
   }
+  llvm::errs() << __LINE__ << "\n";
   if (!Name.starts_with("_Z"))
     return false;
+  llvm::errs() << __LINE__ << "\n";
   // OpenCL C++ built-ins are declared in cl namespace.
   // TODO: consider using 'St' abbriviation for cl namespace mangling.
   // Similar to ::std:: in C++.
   if (IsCpp) {
+    llvm::errs() << __LINE__ << "\n";
     if (Name.starts_with("_ZN")) {
+      llvm::errs() << __LINE__ << "\n";
       // Skip CV and ref qualifiers.
       size_t NameSpaceStart = Name.find_first_not_of("rVKRO", 3);
       // All built-ins are in the ::cl:: namespace.
       if (Name.substr(NameSpaceStart, 11) != "2cl7__spirv")
         return false;
+      llvm::errs() << __LINE__ << "\n";
       size_t DemangledNameLenStart = NameSpaceStart + 11;
       size_t Start =
           Name.find_first_not_of("0123456789", DemangledNameLenStart);
@@ -467,19 +474,24 @@ bool oclIsBuiltin(StringRef Name, StringRef &DemangledName, bool IsCpp) {
       if (!Name.substr(DemangledNameLenStart, Start - DemangledNameLenStart)
                .getAsInteger(10, Len)) {
         DemangledName = Name.substr(Start, Len);
+        llvm::errs() << "XXoclIsBuiltin: DemangledName = " << DemangledName << "\n";
         return true;
       }
       SPIRVDBG(errs() << "Error in extracting integer value");
       return false;
     }
+    llvm::errs() << __LINE__ << "\n";
   }
+  llvm::errs() << __LINE__ << "\n";
   size_t Start = Name.find_first_not_of("0123456789", 2);
   size_t Len = 0;
   if (!Name.substr(2, Start - 2).getAsInteger(10, Len)) {
     DemangledName = Name.substr(Start, Len);
+    llvm::errs() << "oclIsBuiltin: DemangledName = " << DemangledName << "\n";
     return true;
   }
   SPIRVDBG(errs() << "Error in extracting integer value");
+  llvm::errs() << __LINE__ << "\n";
   return false;
 }
 
