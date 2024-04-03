@@ -204,7 +204,7 @@ void OCLToSPIRVBase::visitCallInst(CallInst &CI) {
   auto MangledName = F->getName();
   StringRef DemangledName;
 
-  if (!oclIsBuiltin(MangledName, DemangledName, SrcLang != spv::SourceLanguageOpenCL_C))
+  if (!oclIsBuiltin(MangledName, DemangledName, isCpp(SrcLang)))
     return;
 
   LLVM_DEBUG(dbgs() << "DemangledName: " << DemangledName << '\n');
