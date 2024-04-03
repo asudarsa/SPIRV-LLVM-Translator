@@ -2558,8 +2558,7 @@ std::string getSPIRVFriendlyIRFunctionName(const std::string &UniqName,
 }
 
 bool isCpp(unsigned SrcLang) {
-  return SrcLang == spv::SourceLanguageOpenCL_CPP ||
-         SrcLang == spv::SourceLanguageCPP_for_OpenCL;
+  return SrcLang == spv::SourceLanguageOpenCL_CPP;
 }
 
 } // namespace SPIRV
