@@ -91,9 +91,9 @@ bool OCLTypeToSPIRVBase::runOCLTypeToSPIRV(Module &Module) {
   // suitable form for the SPIR-V translation: it is specifically designed to
   // handle OpenCL C/C++ and C++ for OpenCL types and shouldn't be launched for
   // other source languages.
-  if (std::get<0>(Src) != spv::SourceLanguageOpenCL_C/* &&
+  if (std::get<0>(Src) != spv::SourceLanguageOpenCL_C &&
       std::get<0>(Src) != spv::SourceLanguageOpenCL_CPP &&
-      std::get<0>(Src) != spv::SourceLanguageCPP_for_OpenCL*/)
+      std::get<0>(Src) != spv::SourceLanguageCPP_for_OpenCL)
     return false;
 
   for (auto &F : Module.functions())
