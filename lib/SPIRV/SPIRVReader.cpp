@@ -3432,14 +3432,18 @@ bool SPIRVToLLVM::translate() {
   if (!transSourceExtension())
     return false;
   transGeneratorMD();
-  SPIRVWord Ver = 0;
-  SourceLanguage SrcLang = BM->getSourceLanguage(&Ver);
-  if (!lowerBuiltins(BM, M, isCpp(SrcLang)))
+  //SPIRVWord Ver = 0;
+  //SourceLanguage SrcLang = BM->getSourceLanguage(&Ver);
+  SPIRVWord SrcLangVer = 0;
+  BM->getSourceLanguage(&SrcLangVer);
+  bool IsCpp = SrcLangVer == kOCLVer::CL21;
+  if (!lowerBuiltins(BM, M, IsCpp))
+  //if (!lowerBuiltins(BM, M, isCpp(SrcLang)))
     return false;
   if (BM->getDesiredBIsRepresentation() == BIsRepresentation::SPIRVFriendlyIR) {
-    SPIRVWord SrcLangVer = 0;
-    BM->getSourceLanguage(&SrcLangVer);
-    bool IsCpp = SrcLangVer == kOCLVer::CL21;
+    //SPIRVWord SrcLangVer = 0;
+    //BM->getSourceLanguage(&SrcLangVer);
+    //bool IsCpp = SrcLangVer == kOCLVer::CL21;
     if (!postProcessBuiltinsReturningStruct(M, IsCpp))
       return false;
   }
